@@ -1,10 +1,31 @@
 # import regex library
 import re
+
 # import os
 import os
-# user modules #
+
+## user modules
 # import utilities module
 import Utilities
+# import usersOP module
+import UsersOP
+# import users class
+from UsersOP import Users
+##################### initialization #####################
+# file path of our DB
+
+file_path_data = "FundProData.txt"
+file_path_index = "FundProIndex.txt"
+
+# Open the file in append mode, which creates the file if it doesn't exist , and do not modify if exists
+if not os.path.exists(file_path_data):
+    with open(file_path_data, "a") as f:
+        pass
+if not os.path.exists(file_path_index):
+    with open(file_path_index, "a") as f:
+        pass
+
+##################### start program execute ##################
 # welcome message
 print("#####################################################")
 print("welcome to fundpro website, where dreams becomes true")
@@ -41,7 +62,13 @@ if menu1_input == 2:
     # taking user Last Name
     register_last_name = Utilities.get_input("Enter Your Last Name","name",re)
     # taking user email
-    register_email = Utilities.get_input("Enter Your Email","email",re)
+    while True:
+        register_email = Utilities.get_input("Enter Your Email","email",re)
+        if UsersOP.get_data_by_key(file_path_index,file_path_data,register_email) is None:
+            print("unique")
+            break
+        else:
+            print("This Email Already Used, Where U Here Before !!")
     # taking user password
     while True:
         register_password = Utilities.get_input("Enter Your Password","password",re)
@@ -53,6 +80,9 @@ if menu1_input == 2:
             print("Error Passwords Does Not Match !!! , Enter it again")
     # take user phone number
     register_phone = Utilities.get_input("Enter Your Phone Number","phone",re)
+    # create the user
+    register_user = Users(register_first_name,register_last_name,register_email,register_password,register_phone)
+    register_user.register(file_path_data,file_path_index)
 
 ## exit option
 if menu1_input == 3:
