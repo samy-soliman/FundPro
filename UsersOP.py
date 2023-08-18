@@ -68,16 +68,14 @@ class Users:
     def delete(self):
         pass
         # Delete an entry
-        # key_to_delete = "entry1"
+        # key_to_delete = "key"
         # delete_entry(key_to_delete, data_file_path, index_file_path)
 
     # validate user
-    def login(self):
-        pass
+    def login(self,index_file_path,data_file_path,key):
         # Retrieve data by key
-        # key_to_retrieve = "entry2"
-        # retrieved_data = get_data_by_key(index_file_path, data_file_path, key_to_retrieve)
-        # print("Retrieved data:", retrieved_data)
+        retrieved_data = get_data_by_key(index_file_path, data_file_path, key)
+        print("Retrieved data:", retrieved_data)
 
 
 

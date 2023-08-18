@@ -11,6 +11,9 @@ import Utilities
 import UsersOP
 # import users class
 from UsersOP import Users
+# import encryption for secuirty of passwords and sensitive data
+import encrypt
+
 ##################### initialization #####################
 # file path of our DB
 
@@ -36,56 +39,81 @@ print("#####################################################")
 # Start Program main menu (menu1) register or login
 # start a loop until a valid input is taken or exit
 while True:
-    print("Enter Your Option Number: ")
-    print("1) Login")
-    print("2) Register")
-    print("3) Exit")
-    menu1_input = input()
-    if re.match("^[1-3]{1}$", menu1_input):
+    while True:
+        print("Enter Your Option Number: ")
+        print("1) Login")
+        print("2) Register")
+        print("3) Exit")
+        menu1_input = input()
+        if re.match("^[1-3]{1}$", menu1_input):
+            os.system('clear')
+            break
+        else:
+            print("Wrong Input format, Please Enter a valid input")
+    menu1_input=int(menu1_input)
+
+    ## login option
+    if menu1_input == 1:
+        print("#####################################################")
+        print("##############     Login From        ################")
+        print("#####################################################")
+        # take user email
+        while True:
+            login_email = Utilities.get_input("Enter Your Email","email",re)
+            if UsersOP.get_data_by_key(file_path_index,file_path_data,login_email) is not None:
+                login_password_db = UsersOP.get_data_by_key(file_path_index, file_path_data, login_email)["Password"]
+                break
+            else:
+                print("No Users With This Email!!")
+        # Take user password 
+        login_password = Utilities.get_input("Enter Your Password","password",re)
+        # Simulate a login attempt
+        if encrypt.validate_password(login_password, login_password_db):
+            print("### Login Success ###")
+        else:
+            print("Incorrect password. Access denied.")
+
+    ## register option
+    if menu1_input == 2:
+        print("#####################################################")
+        print("##############     Register From     ################")
+        print("#####################################################")
+        # start taking user input one by one
+        # taking user First Name
+        register_first_name = Utilities.get_input("Enter Your First Name","name",re)
+        # taking user Last Name
+        register_last_name = Utilities.get_input("Enter Your Last Name","name",re)
+        # taking user email
+        while True:
+            register_email = Utilities.get_input("Enter Your Email","email",re)
+            if UsersOP.get_data_by_key(file_path_index,file_path_data,register_email) is None:
+                ##print("unique")
+                break
+            else:
+                print("This Email Already Used, Where U Here Before !!")
+        # taking user password
+        while True:
+            register_password = Utilities.get_input("Enter Your Password","password",re)
+            confirm_register_password = Utilities.get_input("Enter Your Password Again","default",re)
+            if register_password == confirm_register_password:
+                print("password confirmation correct")
+                # Create a SHA-256 hash object
+                stored_hashed_password = encrypt.hash_password(register_password)
+                break
+            else:
+                print("Error Passwords Does Not Match !!! , Enter it again")
+        # take user phone number
+        register_phone = Utilities.get_input("Enter Your Phone Number","phone",re)
+        # create the user
+        register_user = Users(register_first_name,register_last_name,register_email,stored_hashed_password,register_phone)
+        register_user.register(file_path_data,file_path_index)
         os.system('clear')
+        print("##############  Registration Succeeded ################")
+
+    ## exit option
+    if menu1_input == 3:
+        print("########### Best ##### OF ###### LUCK ###############")
+        print("##############       FUNDPRO         ################")
+        print("####### it seems impossible until it's done #########")
+        print("#####################################################")
         break
-    else:
-        print("Wrong Input format, Please Enter a valid input")
-
-menu1_input=int(menu1_input)
-## login option
-if menu1_input == 1:
-    pass
-## register option
-if menu1_input == 2:
-    print("#####################################################")
-    print("##############     Login From        ################")
-    print("#####################################################")
-    # start taking user input one by one
-    # taking user First Name
-    register_first_name = Utilities.get_input("Enter Your First Name","name",re)
-    # taking user Last Name
-    register_last_name = Utilities.get_input("Enter Your Last Name","name",re)
-    # taking user email
-    while True:
-        register_email = Utilities.get_input("Enter Your Email","email",re)
-        if UsersOP.get_data_by_key(file_path_index,file_path_data,register_email) is None:
-            print("unique")
-            break
-        else:
-            print("This Email Already Used, Where U Here Before !!")
-    # taking user password
-    while True:
-        register_password = Utilities.get_input("Enter Your Password","password",re)
-        confirm_register_password = Utilities.get_input("Enter Your Password Again","default",re)
-        if register_password == confirm_register_password:
-            print("password confirmation correct")
-            break
-        else:
-            print("Error Passwords Does Not Match !!! , Enter it again")
-    # take user phone number
-    register_phone = Utilities.get_input("Enter Your Phone Number","phone",re)
-    # create the user
-    register_user = Users(register_first_name,register_last_name,register_email,register_password,register_phone)
-    register_user.register(file_path_data,file_path_index)
-
-## exit option
-if menu1_input == 3:
-    print("#####################################################")
-    print("##############       FUNDPRO         ################")
-    print("#####################################################")

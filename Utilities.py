@@ -7,6 +7,7 @@ def get_input(output_message,input_type,re_module):
     password_regex = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$'
     egypt_phone_regex = r'^01\d{9}$'
     default_regex =  r'^.*$'
+    # define our used regex based on function call
     if input_type == "name":
         match_regex = name_regex
     elif input_type == "email":
@@ -17,11 +18,12 @@ def get_input(output_message,input_type,re_module):
         match_regex = egypt_phone_regex
     elif input_type == "default":
         match_regex = default_regex
+    # start executing reading user input and validating
     while True:
         print(output_message)
         user_input = input()
         if re_module.match(match_regex, user_input):
-            print("Correct")
+            ##print("Correct")
             return user_input
         else:
             if input_type == "name":
