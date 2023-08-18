@@ -1,6 +1,9 @@
+# import regex library
+from re import match as matchregex
+
 # get user input function
 # it reads user input and validates it against a specified regex
-def get_input(output_message,input_type,re_module):
+def get_input(output_message,input_type):
     # define our regex
     name_regex = r'^[A-Za-z][a-z]*$'
     email_regex = r'^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$'
@@ -22,7 +25,7 @@ def get_input(output_message,input_type,re_module):
     while True:
         print(output_message)
         user_input = input()
-        if re_module.match(match_regex, user_input):
+        if matchregex(match_regex, user_input):
             ##print("Correct")
             return user_input
         else:

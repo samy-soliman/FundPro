@@ -31,18 +31,6 @@ def delete_entry(key, data_file_path, index_file_path):
             if index_key != key:
                 index_file.write(line)
 
-def get_data_by_key(index_file_path, data_file_path, key):
-    with open(index_file_path, "r") as index_file:
-        for line in index_file:
-            index_key, position = line.strip().split(":")
-            if index_key == key:
-                with open(data_file_path, "r") as data_file:
-                    data_file.seek(int(position))  # Move to the specified position in the data file
-                    data_line = data_file.readline().strip()
-                    return json.loads(data_line)  # Deserialize the JSON data
-    return None  # Key not found in the index
-
-
 # user class, it should provide all operations on our user
 class Users:
     # initialize the user with its data
@@ -52,6 +40,18 @@ class Users:
         self.Email = data["Email"]
         self.Password = data["Password"]
         self.Phone = data["Phone"]
+    
+    @staticmethod
+    def get_user_data(index_file_path, data_file_path, key):
+        with open(index_file_path, "r") as index_file:
+            for line in index_file:
+                index_key, position = line.strip().split(":")
+                if index_key == key:
+                    with open(data_file_path, "r") as data_file:
+                        data_file.seek(int(position))  # Move to the specified position in the data file
+                        data_line = data_file.readline().strip()
+                        return json.loads(data_line)  # Deserialize the JSON data
+        return None  # Key not found in the index
     
     # save user to file
     def register(self,data_file_path,index_file_path):
@@ -70,12 +70,6 @@ class Users:
         # Delete an entry
         # key_to_delete = "key"
         # delete_entry(key_to_delete, data_file_path, index_file_path)
-
-    # validate user
-    def login(self,index_file_path,data_file_path,key):
-        # Retrieve data by key
-        retrieved_data = get_data_by_key(index_file_path, data_file_path, key)
-        print("Retrieved data:", retrieved_data)
 
 
 
