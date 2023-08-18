@@ -46,12 +46,12 @@ def get_data_by_key(index_file_path, data_file_path, key):
 # user class, it should provide all operations on our user
 class Users:
     # initialize the user with its data
-    def __init__(self, First_name, Last_name, Email,Password,Phone):
-        self.First_name = First_name
-        self.Last_name = Last_name
-        self.Email = Email
-        self.Password = Password
-        self.Phone = Phone
+    def __init__(self, data):
+        self.First_name = data["First_name"]
+        self.Last_name = data["Last_name"]
+        self.Email = data["Email"]
+        self.Password = data["Password"]
+        self.Phone = data["Phone"]
     
     # save user to file
     def register(self,data_file_path,index_file_path):

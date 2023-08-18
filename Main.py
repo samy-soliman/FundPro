@@ -1,6 +1,7 @@
 # import regex library
 import re
-
+# import systym module
+import sys
 # import os
 import os
 
@@ -11,8 +12,8 @@ import Utilities
 import UsersOP
 # import users class
 from UsersOP import Users
-# import encryption for secuirty of passwords and sensitive data
-import encrypt
+# import Encryption for secuirty of passwords and sensitive data
+import Encrypt
 
 ##################### initialization #####################
 # file path of our DB
@@ -58,6 +59,7 @@ while True:
         print("##############     Login From        ################")
         print("#####################################################")
         # take user email
+        logged_user = None
         while True:
             login_email = Utilities.get_input("Enter Your Email","email",re)
             if UsersOP.get_data_by_key(file_path_index,file_path_data,login_email) is not None:
@@ -66,12 +68,16 @@ while True:
             else:
                 print("No Users With This Email!!")
         # Take user password 
-        login_password = Utilities.get_input("Enter Your Password","password",re)
+        login_password = Utilities.get_input("Enter Your Password","default",re)
         # Simulate a login attempt
-        if encrypt.validate_password(login_password, login_password_db):
-            print("### Login Success ###")
-        else:
+        if not Encrypt.validate_password(login_password, login_password_db):
             print("Incorrect password. Access denied.")
+        else:
+            print("### Login Success ###")
+            logged_user = Users(UsersOP.get_data_by_key(file_path_index, file_path_data, login_email))
+        
+            # start Menu after login
+            print("Welcome " + logged_user.First_name)
 
     ## register option
     if menu1_input == 2:
@@ -98,15 +104,18 @@ while True:
             if register_password == confirm_register_password:
                 print("password confirmation correct")
                 # Create a SHA-256 hash object
-                stored_hashed_password = encrypt.hash_password(register_password)
+                stored_hashed_password = Encrypt.hash_password(register_password)
                 break
             else:
                 print("Error Passwords Does Not Match !!! , Enter it again")
         # take user phone number
         register_phone = Utilities.get_input("Enter Your Phone Number","phone",re)
         # create the user
-        register_user = Users(register_first_name,register_last_name,register_email,stored_hashed_password,register_phone)
+        register_user_data = {"First_name":register_first_name,"Last_name":register_last_name,"Email":register_email,"Password":stored_hashed_password,"Phone":register_phone}
+        register_user = Users(register_user_data)
         register_user.register(file_path_data,file_path_index)
+        # clean object for memory and security 
+        del register_user
         os.system('clear')
         print("##############  Registration Succeeded ################")
 
@@ -116,4 +125,4 @@ while True:
         print("##############       FUNDPRO         ################")
         print("####### it seems impossible until it's done #########")
         print("#####################################################")
-        break
+        sys.exit()
