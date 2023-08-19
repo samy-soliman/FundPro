@@ -1,6 +1,5 @@
 import json
 
-
 def append_data(data, index_file_path, data_file_path):
     with open(data_file_path, "a") as data_file:
         position = data_file.tell()  # Get the current file position (end of the file)
@@ -9,7 +8,7 @@ def append_data(data, index_file_path, data_file_path):
 
     # Update the index file with the new entry's position
     with open(index_file_path, "a") as index_file:
-        index_file.write(f"{data['Email']}:{position}\n")
+        index_file.write(f"{data['Title']}:{position}\n")
 
 def delete_entry(key, index_file_path, data_file_path):
     # Delete the entry from the data file
@@ -32,18 +31,19 @@ def delete_entry(key, index_file_path, data_file_path):
             if index_key != key:
                 index_file.write(line)
 
-# user class, it should provide all operations on our user
-class Users:
-    # initialize the user with its data
-    def __init__(self, First_name,Last_name,Email,Password,Phone):
-        self.First_name = First_name
-        self.Last_name = Last_name
+# project class, it should provide all operations on our project
+class Projects:
+    # initialize the project with its data
+    def __init__(self,Email,Title,Details,Target,StartDate,EndDate):
         self.Email = Email
-        self.Password = Password
-        self.Phone = Phone
+        self.Title = Title
+        self.Details = Details
+        self.Target = Target
+        self.StartDate = StartDate
+        self.EndDate = EndDate
     
     @staticmethod
-    def get_user_data(index_file_path, data_file_path, key):
+    def get_project_data(index_file_path, data_file_path, key):
         with open(index_file_path, "r") as index_file:
             for line in index_file:
                 index_key, position = line.strip().split(":")
@@ -54,11 +54,25 @@ class Users:
                         return json.loads(data_line)  # Deserialize the JSON data
         return None  # Key not found in the index
     
-    # save user to file
-    def register(self,index_file_path,data_file_path):
+    @staticmethod
+    def get_projects(data_file_path):
+        with open(data_file_path, "r") as json_file:
+            for line in json_file:
+                data = json.loads(line)
+                print(data)
+    
+    @staticmethod
+    def search_projects(data_file_path,key,value):
+        with open(data_file_path, "r") as json_file:
+            for line in json_file:
+                data = json.loads(line)
+                if data.get(key) == value:
+                    print(data)
+    # save project to file
+    def add(self,index_file_path,data_file_path):
         append_data(self.__dict__, index_file_path,data_file_path)
 
-    # delete user from file
+    # delete project from file
     def delete(self):
         pass
         # Delete an entry

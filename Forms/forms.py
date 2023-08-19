@@ -1,6 +1,7 @@
 # import Encryption for secuirty of passwords and sensitive data
 import Encrypt
-
+# import systym module
+from  sys import exit
 # import os
 from os import system 
 
@@ -10,8 +11,11 @@ from Utilities import get_input
 
 # import users class from Users.py
 from Users import Users
+# import project class from projects.py
+from Projects import Projects
 
-def login_form(file_path_index,file_path_data):
+# login user form
+def login_form(index_file_path,data_file_path):
     print("#####################################################")
     print("##############     Login From        ################")
     print("#####################################################")
@@ -19,8 +23,8 @@ def login_form(file_path_index,file_path_data):
     logged_user = None
     while True:
         login_email = get_input("Enter Your Email","email")
-        if Users.get_user_data(file_path_index,file_path_data,login_email) is not None:
-            login_password_db = Users.get_user_data(file_path_index, file_path_data, login_email)["Password"]
+        if Users.get_user_data(index_file_path,data_file_path,login_email) is not None:
+            login_password_db = Users.get_user_data(index_file_path, data_file_path, login_email)["Password"]
             break
         else:
             print("No Users With This Email!!")
@@ -31,13 +35,10 @@ def login_form(file_path_index,file_path_data):
         print("Incorrect password. Access denied.")
     else:
         print("### Login Success ###")
-        logged_user = Users(Users.get_user_data(file_path_index, file_path_data, login_email))
-    
-        # start Menu after login
-        print("Welcome " + logged_user.First_name)
+        return Users(**Users.get_user_data(index_file_path, data_file_path, login_email))
 
-
-def register_form(file_path_index,file_path_data):
+# register user form
+def register_form(index_file_path,data_file_path):
     print("#####################################################")
     print("##############     Register From     ################")
     print("#####################################################")
@@ -49,7 +50,7 @@ def register_form(file_path_index,file_path_data):
     # taking user email
     while True:
         register_email = get_input("Enter Your Email","email")
-        if Users.get_user_data(file_path_index,file_path_data,register_email) is None:
+        if Users.get_user_data(index_file_path,data_file_path,register_email) is None:
             ##print("unique")
             break
         else:
@@ -68,10 +69,39 @@ def register_form(file_path_index,file_path_data):
     # take user phone number
     register_phone = get_input("Enter Your Phone Number","phone")
     # create the user
-    register_user_data = {"First_name":register_first_name,"Last_name":register_last_name,"Email":register_email,"Password":stored_hashed_password,"Phone":register_phone}
-    register_user = Users(register_user_data)
-    register_user.register(file_path_data,file_path_index)
+    register_user = Users(register_first_name,register_last_name,register_email,stored_hashed_password,register_phone)
+    register_user.register(index_file_path,data_file_path)
     # clean object for memory and security 
     del register_user
     system('clear')
     print("##############  Registration Succeeded ################")
+
+# exit option function in main menu
+def exit_main_form():
+    print("########### Best ##### OF ###### LUCK ###############")
+    print("##############       FUNDPRO         ################")
+    print("####### it seems impossible until it's done #########")
+    print("#####################################################")
+    exit()
+
+# create project form
+def create_project_form(index_file_path,data_file_path,logged_user):
+    print("##############     Project From     ################")
+    # start taking user input one by one
+    # taking project title
+    project_title = get_input("Enter Your Project Title","name")
+    # taking project details
+    project_details = get_input("Enter Your Project Details","alphabet_regex")
+    # take project target amount
+    project_target = get_input("Enter Your Project Target","positive_number_regex")
+    # take project start date
+    project_start_date = get_input("Enter Your Project Strat Date","date_regex")
+    # take project end date
+    project_end_date = get_input("Enter Your Project End Date","date_regex")
+    # create the project
+    project_data = Projects(logged_user.Email,project_title,project_details,project_target,project_start_date,project_end_date)
+    project_data.add(index_file_path,data_file_path)
+    # clean object for memory and security 
+    del project_data
+    system('clear')
+    print("##############  Project Added ################")

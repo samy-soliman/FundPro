@@ -1,31 +1,29 @@
+#################### Importing packages #####################
 # import regex library
-import re
-# import systym module
-from  sys import exit
+from re import match
 # import os
-from os.path import exists as file_exists
 from os import system
 
 # import form
 import Forms
-##################### initialization #####################
-# file path of our DB
+# import application variables
+from AppEnvs import AppEnvs
+# import Project class
+from  Projects import Projects
+################### End Of Imports ##########################
 
-file_path_data = "FundProData.txt"
-file_path_index = "FundProIndex.txt"
+##################### Start Of Initialization ########################
+AppEnvs.init_files()
+# create a user for session info
+logged_user = None
+#################### End Of Initilization #####################
 
-# Open the file in append mode, which creates the file if it doesn't exist , and do not modify if exists
-if not file_exists(file_path_data):
-    with open(file_path_data, "a") as f:
-        pass
-if not file_exists(file_path_index):
-    with open(file_path_index, "a") as f:
-        pass
+##################### Start Program Execute ###################
 
-##################### start program execute ##################
+##################### Start Main Menu ###################
 # welcome message
 print("#####################################################")
-print("welcome to fundpro website, where dreams becomes true")
+print("welcome to fundpro website,  where dreams become true")
 print("#####################################################")
 print("##############       FUNDPRO         ################")
 print("#####################################################")
@@ -39,7 +37,7 @@ while True:
         print("2) Register")
         print("3) Exit")
         menu1_input = input()
-        if re.match("^[1-3]{1}$", menu1_input):
+        if match("^[1-3]{1}$", menu1_input):
             system('clear')
             break
         else:
@@ -48,16 +46,63 @@ while True:
 
     ## login option
     if menu1_input == 1:
-        Forms.login_form(file_path_index,file_path_data)
+        logged_user = Forms.login_form(AppEnvs.file_path_users_index,AppEnvs.file_path_users_data)
+        system('clear')
+        break
 
     ## register option
     if menu1_input == 2:
-        Forms.register_form(file_path_index,file_path_data)
+        Forms.register_form(AppEnvs.file_path_users_index,AppEnvs.file_path_users_data)
 
     ## exit option
     if menu1_input == 3:
-        print("########### Best ##### OF ###### LUCK ###############")
-        print("##############       FUNDPRO         ################")
-        print("####### it seems impossible until it's done #########")
-        print("#####################################################")
-        exit()
+        Forms.exit_main_form()
+##################### End Main Menu ###################
+
+##################### Start Projects Menu ###################
+# Start Program project menu (menu2)
+# start a loop until a valid input is taken or exit
+
+# start Menu after login
+print("Welcome " + logged_user.First_name)
+while True:
+    while True:
+        print("Enter Your Option Number: ")
+        print("1) Create Project")
+        print("2) View Projects")
+        print("3) Edit Projects")
+        print("4) Delete Projects")
+        print("5) Search Projects")
+        print("6) Exit")
+        menu2_input = input()
+        if match("^[1-6]{1}$", menu2_input):
+            system('clear')
+            break
+        else:
+            print("Wrong Input format, Please Enter a valid input")
+    menu2_input=int(menu2_input)
+
+    ## create project option
+    if menu2_input == 1:
+        Forms.create_project_form(AppEnvs.file_path_projects_index,AppEnvs.file_path_projects_data,logged_user)
+
+    ## register option
+    if menu2_input == 2:
+        Projects.get_projects(AppEnvs.file_path_projects_data)
+    ## register option
+    if menu2_input == 3:
+        pass
+    ## register option
+    if menu2_input == 4:
+        pass
+    ## register option
+    if menu2_input == 5:
+        print("Enter Your Date")
+        search_project_date = input()
+        Projects.search_projects(AppEnvs.file_path_projects_data,"StartDate",search_project_date)
+    ## exit option
+    if menu2_input == 6:
+        Forms.exit_main_form()
+##################### End Projects Menu ###################
+
+##################### End Program Execute ###################

@@ -9,6 +9,9 @@ def get_input(output_message,input_type):
     email_regex = r'^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$'
     password_regex = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$'
     egypt_phone_regex = r'^01\d{9}$'
+    alphabet_regex = r'^[A-Za-z]*$'
+    positive_number_regex = r'^[1-9]\d*$'
+    date_regex = r'^(?:(?:19|20)\d\d)-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$'
     default_regex =  r'^.*$'
     # define our used regex based on function call
     if input_type == "name":
@@ -19,6 +22,12 @@ def get_input(output_message,input_type):
         match_regex = password_regex
     elif input_type == "phone":
         match_regex = egypt_phone_regex
+    elif input_type == "alphabet_regex":
+        match_regex = alphabet_regex
+    elif input_type == "positive_number_regex":
+        match_regex = positive_number_regex
+    elif input_type == "date_regex":
+        match_regex = date_regex
     elif input_type == "default":
         match_regex = default_regex
     # start executing reading user input and validating
@@ -37,5 +46,11 @@ def get_input(output_message,input_type):
                 print("Error!, Enter a Minimum length of 8 characters,\nAt least one alphabetical character (uppercase and lowercase)\nAt least one digit\nAt least one special character from @$!%*#?& ")
             elif input_type == "phone":
                 print("Error! Wrong Format,Your number should start with 01 follwed by 9 digits")
+            elif input_type == "alphabet_regex":
+                print("Error! Wrong Input Format, Enter only Alphabetic Characters")
+            elif input_type == "positive_number_regex":
+                print("Error! Wrong Input Format, Enter a Number Bigger Than Zero")
+            elif input_type == "date_regex":
+                print("Error! Wrong Date Format, example \"2023-08-18\"")
             elif input_type == "default":
                 print("Error! Wrong Input Format")
