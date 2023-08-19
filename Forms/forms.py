@@ -29,7 +29,7 @@ def login_form(index_file_path,data_file_path):
         else:
             print("No Users With This Email!!")
     # Take user password 
-    login_password = get_input("Enter Your Password","default")
+    login_password = get_input("Enter Your Password","default_hide")
     # Simulate a login attempt
     if not Encrypt.validate_password(login_password, login_password_db):
         print("Incorrect password. Access denied.")
@@ -58,7 +58,7 @@ def register_form(index_file_path,data_file_path):
     # taking user password
     while True:
         register_password = get_input("Enter Your Password","password")
-        confirm_register_password = get_input("Enter Your Password Again","default")
+        confirm_register_password = get_input("Enter Your Password Again","default_hide")
         if register_password == confirm_register_password:
             print("password confirmation correct")
             # Create a SHA-256 hash object

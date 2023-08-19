@@ -86,16 +86,16 @@ while True:
     if menu2_input == 1:
         Forms.create_project_form(AppEnvs.file_path_projects_index,AppEnvs.file_path_projects_data,logged_user)
 
-    ## register option
+    ## List option
     if menu2_input == 2:
         Projects.get_projects(AppEnvs.file_path_projects_data)
-    ## register option
+    ## edit option
     if menu2_input == 3:
         pass
-    ## register option
+    ## delete option
     if menu2_input == 4:
         pass
-    ## register option
+    ## search option
     if menu2_input == 5:
         print("Enter Your Date")
         search_project_date = input()

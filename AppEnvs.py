@@ -1,3 +1,4 @@
+# This files containes our program main variables and behaviours 
 from os.path import exists as file_exists
 
 class AppEnvs:

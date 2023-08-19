@@ -1,4 +1,5 @@
 import json
+from prettytable import PrettyTable
 
 def append_data(data, index_file_path, data_file_path):
     with open(data_file_path, "a") as data_file:
@@ -56,18 +57,54 @@ class Projects:
     
     @staticmethod
     def get_projects(data_file_path):
-        with open(data_file_path, "r") as json_file:
-            for line in json_file:
-                data = json.loads(line)
-                print(data)
+        # Read the file line by line and parse each line as JSON
+        data = []
+        with open(data_file_path, 'r') as file:
+            for line in file:
+                try:
+                    dictionary = json.loads(line.strip())
+                    data.append(dictionary)
+                except json.JSONDecodeError:
+                    print(f"Error parsing line: {line}")
+
+        # Create a PrettyTable
+        table = PrettyTable()
+        if data:
+            # Add table headers
+            table.field_names = data[0].keys()
+
+            # Add rows to the table
+            for dictionary in data:
+                table.add_row(dictionary.values())
+
+            # Print the table
+            print(table)
+        else:
+            print("No data found in the file.")
     
     @staticmethod
     def search_projects(data_file_path,key,value):
+        data = []
         with open(data_file_path, "r") as json_file:
             for line in json_file:
-                data = json.loads(line)
-                if data.get(key) == value:
-                    print(data)
+                line_data = json.loads(line)
+                if line_data.get(key) == value:
+                    data.append(line_data)
+        
+        # Create a PrettyTable
+        table = PrettyTable()
+        if data:
+            # Add table headers
+            table.field_names = data[0].keys()
+
+            # Add rows to the table
+            for dictionary in data:
+                table.add_row(dictionary.values())
+
+            # Print the table
+            print(table)
+        else:
+            print("No data found in the file.")
     # save project to file
     def add(self,index_file_path,data_file_path):
         append_data(self.__dict__, index_file_path,data_file_path)

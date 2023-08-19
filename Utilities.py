@@ -1,5 +1,8 @@
 # import regex library
 from re import match as matchregex
+# import getpass for securing password
+from getpass import getpass
+
 
 # get user input function
 # it reads user input and validates it against a specified regex
@@ -9,7 +12,7 @@ def get_input(output_message,input_type):
     email_regex = r'^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$'
     password_regex = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$'
     egypt_phone_regex = r'^01\d{9}$'
-    alphabet_regex = r'^[A-Za-z]*$'
+    alphabet_regex = r'[A-Za-z]+(?: [A-Za-z]+)*'
     positive_number_regex = r'^[1-9]\d*$'
     date_regex = r'^(?:(?:19|20)\d\d)-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$'
     default_regex =  r'^.*$'
@@ -28,12 +31,15 @@ def get_input(output_message,input_type):
         match_regex = positive_number_regex
     elif input_type == "date_regex":
         match_regex = date_regex
-    elif input_type == "default":
+    elif input_type == "default" or input_type == "default_hide":
         match_regex = default_regex
     # start executing reading user input and validating
     while True:
         print(output_message)
-        user_input = input()
+        if input_type == "password" or input_type == "default_hide":
+            user_input = getpass()
+        else:
+            user_input = input()
         if matchregex(match_regex, user_input):
             ##print("Correct")
             return user_input
@@ -52,5 +58,5 @@ def get_input(output_message,input_type):
                 print("Error! Wrong Input Format, Enter a Number Bigger Than Zero")
             elif input_type == "date_regex":
                 print("Error! Wrong Date Format, example \"2023-08-18\"")
-            elif input_type == "default":
+            elif input_type == "default" or input_type == "default_hide":
                 print("Error! Wrong Input Format")
