@@ -9,8 +9,9 @@ def append_data(data, index_file_path, data_file_path):
 
     # Update the index file with the new entry's position
     with open(index_file_path, "a") as index_file:
-        index_file.write(f"{data['Email']}:{position}\n")
+        index_file.write(f"{data['Email']}:{data['Title']}:{position}\n")
 
+"""
 def delete_entry(key, index_file_path, data_file_path):
     # Delete the entry from the data file
     with open(data_file_path, "r") as data_file:
@@ -31,6 +32,7 @@ def delete_entry(key, index_file_path, data_file_path):
             index_key, _ = line.strip().split(":")
             if index_key != key:
                 index_file.write(line)
+"""
 
 # project class, it should provide all operations on our project
 class Projects:
@@ -125,11 +127,17 @@ class Projects:
     def add(self,index_file_path,data_file_path):
         append_data(self.__dict__, index_file_path,data_file_path)
     # delete project from file
-    def delete(self):
-        pass
-        # Delete an entry
-        # key_to_delete = "key"
-        # delete_entry(key_to_delete, data_file_path, index_file_path)
+    @staticmethod
+    def delete_project(title, email,data_file_path ):
+        lines_to_keep = []
+        with open(data_file_path, 'r') as file:
+            for line in file:
+                entry = json.loads(line)  # Parse JSON string into a dictionary
+                if entry.get("Title") != title or entry.get("Email") != email:
+                    lines_to_keep.append(line)
+        
+        with open(data_file_path, 'w') as file:
+            file.writelines(lines_to_keep)
 
 
 

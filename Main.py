@@ -94,7 +94,7 @@ while True:
         pass
     ## delete option
     if menu2_input == 4:
-        pass
+        Forms.delete_project_form(logged_user.Email,AppEnvs.file_path_projects_data)
     ## search option
     if menu2_input == 5:
         Forms.search_project_form(AppEnvs.file_path_projects_data)

@@ -11,7 +11,7 @@ def append_data(data, index_file_path, data_file_path):
     with open(index_file_path, "a") as index_file:
         index_file.write(f"{data['Email']}:{position}\n")
 
-def delete_entry(key, index_file_path, data_file_path):
+def delete_user(key, index_file_path, data_file_path):
     # Delete the entry from the data file
     with open(data_file_path, "r") as data_file:
         lines = data_file.readlines()

@@ -124,7 +124,7 @@ def search_project_form(data_file_path):
         print("1) Title")
         print("2) StartDate")
         print("3) EndDate")
-        print("4) Owner")
+        print("4) title")
         search_project_column_input = input()
         if match("^[1-4]{1}$", search_project_column_input):
             system('clear')
@@ -139,11 +139,16 @@ def search_project_form(data_file_path):
     elif search_project_column_input == 3:
         search_project_column = "EndDate"
     elif search_project_column_input == 4:
-        search_project_column = "Owner"
+        search_project_column = "title"
 
     if search_project_column_input == 2 or search_project_column_input == 3:
         search_project_column_data = get_input("Enter Your Date","date_regex")
     elif search_project_column_input == 1 or search_project_column_input == 4:
         search_project_column_data = get_input("Enter Your Search Value","name")
     Projects.search_projects(data_file_path,search_project_column,search_project_column_data)
-    
+
+def delete_project_form(email,data_file_path):
+
+    project_title = get_input("Enter Your Project Title","name")
+
+    Projects.delete_project(project_title, email,data_file_path )
