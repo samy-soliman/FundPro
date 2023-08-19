@@ -3,7 +3,11 @@ import Encrypt
 # import systym module
 from  sys import exit
 # import os
-from os import system 
+from os import system
+# import date module for comparing start and end dates
+from datetime import datetime
+# import regex library
+from re import match
 
 ## user modules
 # import utilities module
@@ -97,11 +101,49 @@ def create_project_form(index_file_path,data_file_path,logged_user):
     # take project start date
     project_start_date = get_input("Enter Your Project Strat Date","date_regex")
     # take project end date
-    project_end_date = get_input("Enter Your Project End Date","date_regex")
+    while True:
+        project_end_date = get_input("Enter Your Project End Date","date_regex")
+        date_start = datetime.strptime(project_start_date, "%Y-%m-%d")
+        date_end = datetime.strptime(project_end_date, "%Y-%m-%d")
+        
+        if date_start > date_end:
+            print("Error End date is before the start date, Are You a time Traveller")
+        else:
+            break
     # create the project
-    project_data = Projects(logged_user.Email,project_title,project_details,project_target,project_start_date,project_end_date)
+    project_data = Projects(logged_user.Email,logged_user.First_name,project_title,project_details,project_target,project_start_date,project_end_date)
     project_data.add(index_file_path,data_file_path)
     # clean object for memory and security 
     del project_data
     system('clear')
     print("##############  Project Added ################")
+
+def search_project_form(data_file_path):
+    while True:
+        print("What do You want to Search With: ")
+        print("1) Title")
+        print("2) StartDate")
+        print("3) EndDate")
+        print("4) Owner")
+        search_project_column_input = input()
+        if match("^[1-4]{1}$", search_project_column_input):
+            system('clear')
+            break
+        else:
+            print("Wrong Input, Please Enter a valid input")
+    search_project_column_input = int(search_project_column_input)
+    if search_project_column_input == 1:
+        search_project_column = "Title"
+    elif search_project_column_input == 2:
+        search_project_column = "StartDate"
+    elif search_project_column_input == 3:
+        search_project_column = "EndDate"
+    elif search_project_column_input == 4:
+        search_project_column = "Owner"
+
+    if search_project_column_input == 2 or search_project_column_input == 3:
+        search_project_column_data = get_input("Enter Your Date","date_regex")
+    elif search_project_column_input == 1 or search_project_column_input == 4:
+        search_project_column_data = get_input("Enter Your Search Value","name")
+    Projects.search_projects(data_file_path,search_project_column,search_project_column_data)
+    

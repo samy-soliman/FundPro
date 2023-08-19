@@ -97,9 +97,7 @@ while True:
         pass
     ## search option
     if menu2_input == 5:
-        print("Enter Your Date")
-        search_project_date = input()
-        Projects.search_projects(AppEnvs.file_path_projects_data,"StartDate",search_project_date)
+        Forms.search_project_form(AppEnvs.file_path_projects_data)
     ## exit option
     if menu2_input == 6:
         Forms.exit_main_form()

@@ -9,7 +9,7 @@ def append_data(data, index_file_path, data_file_path):
 
     # Update the index file with the new entry's position
     with open(index_file_path, "a") as index_file:
-        index_file.write(f"{data['Title']}:{position}\n")
+        index_file.write(f"{data['Email']}:{position}\n")
 
 def delete_entry(key, index_file_path, data_file_path):
     # Delete the entry from the data file
@@ -35,8 +35,9 @@ def delete_entry(key, index_file_path, data_file_path):
 # project class, it should provide all operations on our project
 class Projects:
     # initialize the project with its data
-    def __init__(self,Email,Title,Details,Target,StartDate,EndDate):
+    def __init__(self,Email,Owner,Title,Details,Target,StartDate,EndDate):
         self.Email = Email
+        self.Owner = Owner
         self.Title = Title
         self.Details = Details
         self.Target = Target
@@ -57,7 +58,7 @@ class Projects:
     
     @staticmethod
     def get_projects(data_file_path):
-        # Read the file line by line and parse each line as JSON
+    # Read the file line by line and parse each line as JSON
         data = []
         with open(data_file_path, 'r') as file:
             for line in file:
@@ -69,16 +70,31 @@ class Projects:
 
         # Create a PrettyTable
         table = PrettyTable()
+        columns = ["Owner", "Title", "Details", "Target", "StartDate", "EndDate"]
         if data:
-            # Add table headers
-            table.field_names = data[0].keys()
+            if columns:
+                # Filter columns based on the specified list
+                valid_columns = [col for col in columns if col in data[0]]
+                if valid_columns:
+                    # Add table headers
+                    table.field_names = valid_columns
+                    # Add rows to the table
+                    for dictionary in data:
+                        table.add_row([dictionary[col] for col in valid_columns])
 
-            # Add rows to the table
-            for dictionary in data:
-                table.add_row(dictionary.values())
+                    # Print the table
+                    print(table)
+                else:
+                    print("No valid columns specified.")
+            else:
+                # Add table headers
+                table.field_names = data[0].keys()
+                # Add rows to the table
+                for dictionary in data:
+                    table.add_row(dictionary.values())
 
-            # Print the table
-            print(table)
+                # Print the table
+                print(table)
         else:
             print("No data found in the file.")
     
@@ -108,7 +124,6 @@ class Projects:
     # save project to file
     def add(self,index_file_path,data_file_path):
         append_data(self.__dict__, index_file_path,data_file_path)
-
     # delete project from file
     def delete(self):
         pass
